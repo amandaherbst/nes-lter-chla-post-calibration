@@ -6,7 +6,7 @@ addpath '/Users/amandaherbst/Documents/MATLAB/SURFO'
 % Cruise selection
 cruise={'en644';'en649';'en655';'en657';'en661';'en668'};
 
-for i1=6:length(cruise)
+for i1=1:length(cruise)
     
     % Get underway data in csv files created from code to match chl-a and
     % fluorescence
