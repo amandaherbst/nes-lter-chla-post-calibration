@@ -6,7 +6,7 @@
 % Outputs: en6xx_post_cal_fluo.csv
 % Authors: Amanda Herbst, Pierre Marrec
 % Created on 08/06/2021
-% Updated on 08/10/2021
+% Updated on 08/11/2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clearvars, clc, close all
@@ -36,15 +36,15 @@ for i1=1:length(cruise)
     table1.time_discrete = datestr(table1.date_time_utc, iso8601format);
     table1.time_discrete = datenum(table1.time_discrete, iso8601format);
     
-    % only use data with quality control flag = 1
+    % only use discrete data with quality control flag = 1
     a=find(table1.iode_quality_flag==1);
     chl1=table1.chl(a);
     fluo_wetstar1 = table1.fluorescence_wetstar_match(a);
     fluo_ecofl1 = table1.fluorescence_ecofl_match(a);
     
     n = length(chl1(~isnan(chl1)));
-    % Find linear fit model
     
+    % Find linear fit model
     
     if i1==1  % use ecofl for en644 and wetstar for rest of the cruises
         model1=fitlm(fluo_ecofl1,chl1);
@@ -79,7 +79,6 @@ for i1=1:length(cruise)
     % define length of table for each cruise
     table_length=length(Start:End);
     
-    
     %Create a table to store the post-calibrated data for each cruise
     Results=table('Size',[table_length 9],'VariableTypes',...
         {'categorical','string','double','double','double'...
@@ -104,6 +103,9 @@ for i1=1:length(cruise)
             Results.iode_quality_flag(i2)=3;
         else
         end
+        
+        % First 2 days of en661 cruise will be considered as 3=questionable,
+        %more detailed  in the ReadMe file
         if i1==5
             TIME=Time_UW(Start:End);
             C3=TIME(i2)<=datenum(2021,2,5,9,22,0);
@@ -113,17 +115,25 @@ for i1=1:length(cruise)
             end
         else
         end
+        % Any NaN data will be considered as 9=missing data
+        CAL=calibrated_fluorescence(Start:End);
+        C4=isnan(CAL(i2));
+        if C4==1
+            Results.iode_quality_flag(i2)=9;
+        else
+        end
+        % Any negative values will be considered as 4=bad data
+        C5=find(CAL(i2)<0);
+        if C5==1
+            Results.iode_quality_flag(i2)=4;
+        else
+        end
+        
     end
     
-    %And the 2 first day of en661 cruise will be considered as 3=questionable,
-    %more detailed  in the ReadMe file
-    
-    
     Results.date_time_utc=datestr(Time_UW(Start:End),iso8601format);
-    
     Results.latitude=table_uw.gps_furuno_latitude(Start:End);
     Results.longitude=table_uw.gps_furuno_longitude(Start:End);
-    
     Results.depth=repmat(5,table_length,1);
     Results.fluorescence_post_cal=calibrated_fluorescence(Start:End);
     
@@ -134,12 +144,6 @@ for i1=1:length(cruise)
         Results.fluorescence_manufacturer_cal=table_uw.tsg1_fluorescence_wetstar(Start:End);
         Results.preferred_fluorometer=ones(table_length,1);
     end
-    
-    %The first and last 5min with data acquisition will be flagged as
-    %3=questionable
-    
-    
-    
     
     tablename = strcat(rep,cruise{i1},'_post_cal_fluo.csv');
     writetable(Results,tablename)
