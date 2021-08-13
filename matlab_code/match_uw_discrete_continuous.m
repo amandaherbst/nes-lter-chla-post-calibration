@@ -30,7 +30,7 @@ for i1=1:length(cruise)
     iso8601format = 'yyyy-mm-dd hh:MM:ss';
     Time_UW = datenum(table_uw.date, iso8601format);
     
-    %Get the Latitude, Longitude, Fluo1/Fluo2 in Volt and in ug/L from the table
+    %Get the Latitude, Longitude, Fluo1/Fluo2 in ug/L (manufacturer-calibrated) from the table
     Latitude=table_uw.gps_furuno_latitude;
     Longitude=table_uw.gps_furuno_longitude;
     Fluo1_wetstar=table_uw.tsg1_fluorescence_wetstar;
