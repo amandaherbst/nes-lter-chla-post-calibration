@@ -1,4 +1,4 @@
-cruise,date_time_utc,latitude,longitude,depth,replicate,filter_size,chl,phaeo,iode_quality_flag,fluo1_wetstar_match,fluo2_ecofl_match
+cruise,date_time_utc,latitude,longitude,depth,replicate,filter_size,chl,phaeo,iode_quality_flag,fluo_1_wetstar_match,fluo_2_ecofl_match
 en668,2021-07-16 20:30:00,41.1184,-70.8857,5,a,>0,0.68,0.46,1,0.879333333333333,0.678966666666667
 en668,2021-07-16 20:30:00,41.1184,-70.8857,5,b,>0,0.9,0.22,1,0.879333333333333,0.678966666666667
 en668,2021-07-16 20:30:00,41.1184,-70.8857,5,c,>0,0.74,0.4,1,0.879333333333333,0.678966666666667
