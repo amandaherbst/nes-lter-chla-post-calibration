@@ -77,8 +77,8 @@ for i1=1:length(cruise)
         Results.iode_quality_flag(i2)=table_discrete.qc(i2);
         
         %Average fluorescence values 
-        Results.fluorescence_wetstar_match(i2)=nanmean(Fluo1_wetstar(A1m,1));
-        Results.fluorescence_ecofl_match(i2)=nanmean(Fluo2_ecofl(A1m,1));
+        Results.fluo1_wetstar_match(i2)=nanmean(Fluo1_wetstar(A1m,1));
+        Results.fluo2_ecofl_match(i2)=nanmean(Fluo2_ecofl(A1m,1));
         
     end
     
