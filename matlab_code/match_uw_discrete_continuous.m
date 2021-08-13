@@ -75,6 +75,12 @@ for i1=1:length(cruise)
         Results.chl(i2)=table_discrete.chl(i2);
         Results.phaeo(i2)=table_discrete.phaeo(i2);
         Results.iode_quality_flag(i2)=table_discrete.qc(i2);
+        % Flag NaN chl values with 9 = missing data
+        n=isnan(table_discrete.chl(i2));
+        if n==1
+            Results.iode_quality_flag(i2)=9;
+        else
+        end
         
         %Average fluorescence values 
         Results.fluo1_wetstar_match(i2)=nanmean(Fluo1_wetstar(A1m,1));
