@@ -30,7 +30,7 @@ for i1=1:length(cruise)
     iso8601format = 'yyyy-mm-dd hh:MM:ss';
     Time_UW = datenum(table_uw.date, iso8601format);
     
-    %Get the Latitude, Longitude, Fluo1/Fluo2 in ug/L from the table
+    %Get the Latitude, Longitude, Fluo1/Fluo2 in Volt and in ug/L from the table
     Latitude=table_uw.gps_furuno_latitude;
     Longitude=table_uw.gps_furuno_longitude;
     Fluo1_wetstar=table_uw.tsg1_fluorescence_wetstar;
@@ -51,9 +51,10 @@ for i1=1:length(cruise)
         ,'string','string','double','double','double','double','double'},...
         'VariableNames',{'cruise','date_time_utc','latitude','longitude','depth',...
         'replicate','filter_size','chl','phaeo','iode_quality_flag',...
-        'fluorescence_wetstar_match','fluorescence_ecofl_match'});
+        'fluo1_wetstar_match','fluo2_ecofl_match'});
     
-    %Find for each discrete data the corresponding lat/lon & fluorescence  
+    %Find for each discrete data the corresponding lat/lon (exact time),
+    %the fluorescence (exact times) 
     for i2=1:length(Time_discrete)
         
         %Find the minimal difference between the sampling time and the
