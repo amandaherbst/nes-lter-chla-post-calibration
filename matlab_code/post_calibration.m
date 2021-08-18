@@ -140,9 +140,11 @@ for i1=1:length(cruise)
     if i1==1 %for en644 the prefered fluorometer is 2 = ECOFL
         Results.fluorescence_manufacturer_cal=table_uw.tsg1_fluorescence_ecofl(Start:End);
         Results.preferred_fluorometer=repmat(2,table_length,1);
+        Results.preferred_fluo_name=repmat(strcat('ecofl'),table_length,1);
     else %for the other cruises, the prefered fluoroemeter is 1 = WetStar
         Results.fluorescence_manufacturer_cal=table_uw.tsg1_fluorescence_wetstar(Start:End);
         Results.preferred_fluorometer=ones(table_length,1);
+        Results.preferred_fluo_name=repmat(strcat('wetstar'),table_length,1);
     end
     
     tablename = strcat(rep,cruise{i1},'_post_cal_fluo.csv');
