@@ -1,16 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Match underway discrete and continuous data 
+% Match underway discrete and continuous data and assigned lat/lon
 % Finds the matching continuous underway fluorescence data to the discrete
 % underway data based on +/- 1 minute time interval
-% Inputs: RESTAPI Underway, nes-lter-underway-chla-en6xx.csv files
+% Assigned Latitude and Longitude values to each individual sample
+% Inputs: RESTAPI Underway, nes-lter-underway-chla-qc-en6xx.csv files
 % Outputs: en6xx_uw_discrete_cont_match.csv
 % Authors: Amanda Herbst, Pierre Marrec
 % Created on 08/05/2021
+% Modified on 03/18/2022
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clearvars, clc, close all
 
 %Set the directory
-rep = '/Users/amandaherbst/Documents/MATLAB/SURFO/';
+rep = '/Users/pierr/Desktop/NES-LTER_underway_Chla/';
+rep1= strcat(rep,'nes-lter-underway-chla-qc_csv_files/');
+rep2= strcat(rep,'uw_discrete_cont_match/');
 %URL of the REST-API
 RESTAPI='https://nes-lter-data.whoi.edu/api/';
 %cruise selection
@@ -38,7 +42,7 @@ for i1=1:length(cruise)
    
     
     %Get the discrete data from the discrete underway Chl-a csv files
-    tablename2 = strcat(rep,'nes-lter-underway-chla-',cruise{i1},'.csv');
+    tablename2 = strcat(rep1,'nes-lter-underway-chla-qc-',cruise{i1},'.csv');
     table_discrete=readtable(tablename2);
     
     %Convert the date string into datenum
@@ -94,7 +98,7 @@ for i1=1:length(cruise)
     
     %Save the Results Table for each cruise and delete the Result table for
     %the next cruise
-    tablename = strcat(rep,cruise{i1},'_uw_discrete_cont_match.csv');
+    tablename = strcat(rep2,cruise{i1},'_uw_discrete_cont_match.csv');
     writetable(Results,tablename)
     
     clear Results

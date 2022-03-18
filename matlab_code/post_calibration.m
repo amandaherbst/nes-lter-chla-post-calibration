@@ -6,13 +6,15 @@
 % Outputs: en6xx_post_cal_fluo.csv
 % Authors: Amanda Herbst, Pierre Marrec
 % Created on 08/06/2021
-% Updated on 08/11/2021
+% Updated on 03/18/2022
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clearvars, clc, close all
 
 %Set the directory
-rep = '/Users/amandaherbst/Documents/MATLAB/SURFO/';
+rep = '/Users/pierr/Desktop/NES-LTER_underway_Chla/';
+rep1= strcat(rep,'uw_discrete_cont_match/');
+rep2= strcat(rep,'post-cal-fluo/');
 %URL of the REST-API
 RESTAPI='https://nes-lter-data.whoi.edu/api/';
 %cruise selection
@@ -31,7 +33,7 @@ for i1=1:length(cruise)
     
     % Get underway data in csv files created from code to match chl-a and
     % fluorescence
-    filename1=strcat(cruise{i1},'_uw_discrete_cont_match.csv');
+    filename1=strcat(rep1,cruise{i1},'_uw_discrete_cont_match.csv');
     table1 = readtable(filename1);
     table1.time_discrete = datestr(table1.date_time_utc, iso8601format);
     table1.time_discrete = datenum(table1.time_discrete, iso8601format);
@@ -39,8 +41,8 @@ for i1=1:length(cruise)
     % only use discrete data with quality control flag = 1
     a=find(table1.iode_quality_flag==1);
     chl1=table1.chl(a);
-    fluo_wetstar1 = table1.fluorescence_wetstar_match(a);
-    fluo_ecofl1 = table1.fluorescence_ecofl_match(a);
+    fluo_wetstar1 = table1.fluo1_wetstar_match(a);
+    fluo_ecofl1 = table1.fluo2_ecofl_match(a);
     
     n = length(chl1(~isnan(chl1)));
     
@@ -147,7 +149,7 @@ for i1=1:length(cruise)
         Results.preferred_fluo_name=repmat(strcat('wetstar'),table_length,1);
     end
     
-    tablename = strcat(rep,cruise{i1},'_post_cal_fluo.csv');
+    tablename = strcat(rep2,cruise{i1},'_post_cal_fluo.csv');
     writetable(Results,tablename)
     
 end
