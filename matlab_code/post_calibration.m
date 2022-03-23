@@ -92,8 +92,11 @@ for i1=1:length(cruise)
     %Start by setting all the QC flags to 1=good
     Results.iode_quality_flag=ones(table_length,1);
     
+    
     for i2=1:table_length
+        
         Results.cruise(i2)=cruise(i1);
+
         %Set up the QC flag to 3=questionable to the first and last 5min
         C1=i2<=5;
         if C1==1
@@ -117,6 +120,17 @@ for i1=1:length(cruise)
             end
         else
         end
+
+        % Consider all data acquired north of 41.36oN latitude, the
+        % latitude of Point Judith (RI) = the southern limit of
+        % Narragansett Bay as questionable.
+        LAT=table_uw.gps_furuno_latitude(Start:End);
+        C4=LAT(i2)>41.36;
+        if C4==1
+            Results.iode_quality_flag(i2)=3;
+        else
+        end
+
         % Any NaN data will be considered as 9=missing data
         CAL=calibrated_fluorescence(Start:End);
         C4=isnan(CAL(i2));
@@ -134,10 +148,12 @@ for i1=1:length(cruise)
     end
     
     Results.date_time_utc=datestr(Time_UW(Start:End),iso8601format);
-    Results.latitude=table_uw.gps_furuno_latitude(Start:End);
-    Results.longitude=table_uw.gps_furuno_longitude(Start:End);
+    %Round latitude and longitude to 4 decimal digits
+    Results.latitude=round(table_uw.gps_furuno_latitude(Start:End),4);
+    Results.longitude=round(table_uw.gps_furuno_longitude(Start:End),4);
     Results.depth=repmat(5,table_length,1);
-    Results.fluorescence_post_cal=calibrated_fluorescence(Start:End);
+    %round fluo_post_cal to 2 decimal digits
+    Results.fluorescence_post_cal=round(calibrated_fluorescence(Start:End),2);
     
     if i1==1 %for en644 the prefered fluorometer is 2 = ECOFL
         Results.fluorescence_manufacturer_cal=table_uw.tsg1_fluorescence_ecofl(Start:End);
